@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "title": "睡眠科学知识库",
+    "version": "1.0.0",
+    "updated": "2026-10-12",
+    "levelLegend": {
+      "A": "学会指南 / 系统综述 / 大样本 RCT",
+      "B": "单项 RCT 或小样本对照",
+      "C": "机制推断或二手来源，谨慎使用"
+    }
+  },
+
+  "sleepNeed": {
+    "adults": { "hours": "7+", "level": "A", "source": "AASM/SRS 2015 联合共识, J Clin Sleep Med 11(6):591-592" },
+    "byAge": [
+      { "group": "婴儿 4-12 月", "hours": "12-16", "level": "A" },
+      { "group": "幼儿 1-2 岁", "hours": "11-14", "level": "A" },
+      { "group": "3-5 岁", "hours": "10-13", "level": "A" },
+      { "group": "6-12 岁", "hours": "9-12", "level": "A" },
+      { "group": "青少年 13-18 岁", "hours": "8-10", "level": "A" },
+      { "group": "成人 18+", "hours": "7+", "level": "A" },
+      { "group": "老年人", "hours": "6-7", "level": "A", "source": "全国爱卫办 睡眠健康核心信息" }
+    ],
+    "chinaOfficial": {
+      "dailyHours": "7-8",
+      "recommendBedtime": "22:00-23:00",
+      "recommendWake": "06:00-07:00",
+      "source": "健康中国行动(2019-2030) / 全国爱卫办"
+    }
+  },
+
+  "baselines": {
+    "cycleMinutes": { "default": 90, "range": [70, 120], "median": 96, "level": "A",
+      "note": "90 是人群均值不是定律。6000+ PSG 周期回顾研究：中位数 96 分钟，个体与同夜内差异都很大。前半夜周期偏短以深睡为主，后半夜变长以 REM 为主。",
+      "source": "Ultradian sleep cycles: Frequency, duration... retrospective study" },
+    "sleepLatencyMinutes": { "normal": [10, 20], "pooledMean": 11.7, "default": 15, "range": [0, 60], "level": "A",
+      "note": "<8 分钟提示过度嗜睡（MSLT 实践参数）；>20-30 分钟常态出现提示入睡困难。",
+      "source": "Ohayon et al. Sleep 2004; Littner et al. Sleep 2005" },
+    "sleepEfficiencyHealthy": { "value": ">=85-90%", "level": "A" },
+    "targetCycles": { "recommended": [5, 6], "range": [3, 6], "level": "A" }
+  },
+
+  "recovery": [
+    { "id": "debt-accumulation", "level": "A",
+      "claim": "每晚 4-6 小时连续两周，认知损伤可累积到相当于连续 48 小时不睡",
+      "detail": "48 人随机分 4/6/8h 卧床 14 天。第 14 天 6h 组 ≈ 48h 完全不睡。从第 4 天起主观困倦度不再反映真实受损程度——人感觉不到自己在变差。",
+      "source": "Van Dongen HPA et al. Sleep 2003;26(2):117-26",
+      "action": "不要用'我觉得还行'来判断自己缺不缺觉" },
+
+    { "id": "one-night-not-enough", "level": "A",
+      "claim": "一晚补觉补不回来——即使睡到 10 小时卧床仍未完全恢复",
+      "detail": "159 人先 5 晚限制到 4h 卧床，再随机给 0/2/4/6/8/10 小时恢复夜。改善随剂量单调上升，但 10 小时卧床（实际 8.96h）后 PVT 表现、主观困倦、疲劳仍未回到基线。",
+      "source": "Banks S, Van Dongen HPA, Maislin G, Dinges DF. Sleep 2010;33(8):1013-1026",
+      "action": "按每晚多睡 1-1.5 小时分期还债，不要攒到周末一次猛补" },
+
+    { "id": "re-exposure-worse", "level": "A",
+      "claim": "未恢复状态下再受一次睡眠限制，损伤接近无债状态的两倍",
+      "detail": "周末自由补觉不能阻止代谢失调：回到限制期后节律相位后移、餐后能量摄入与体重增加。",
+      "source": "Sleep Advances 2023;4(1):zpac044; Depner et al.",
+      "action": "还清之前别再加债，否则脆弱性不成比例放大" },
+
+    { "id": "nasa-nap", "level": "B",
+      "claim": "约 26 分钟小睡：反应/警觉表现 +34%，生理警觉 +54%",
+      "detail": "21 名跨太平洋 747 飞行员。休息组 93% 真的睡着，平均 5.6 分钟入睡、睡 25.8 分钟。效应是相对不休息的疲劳组，不是相对满血状态；不能抵消累积睡眠债。",
+      "source": "Rosekind MR et al. NASA TM 1994 / J Sleep Res 1995",
+      "action": "午后 13:00-15:00 小睡 20-26 分钟；可叠加咖啡小睡（躺下前喝咖啡，20 分钟起效）" },
+
+    { "id": "nap-lengths", "level": "B",
+      "presets": [
+        { "minutes": 20, "note": "能量小睡，快速恢复，无宿醉感" },
+        { "minutes": 26, "note": "NASA 方案，含入睡缓冲" },
+        { "minutes": 60, "note": "轻度恢复，有助记忆巩固" },
+        { "minutes": 90, "note": "完整周期，留 20 分钟缓冲避免睡眠惯性" }
+      ],
+      "action": "超过 30 分钟易进深睡，醒来发懵；不晚于 15:00，否则偷夜间睡眠压力" },
+
+    { "id": "recovery-protocol", "level": "A",
+      "steps": [
+        "当晚把就寝时间提前，恢复 7h+ 卧床（Banks 2010）",
+        "醒后 30 分钟内户外见光 10-30 分钟",
+        "午后小睡 <=26 分钟，不晚于 15:00（NASA）",
+        "咖啡因醒后 60-90 分钟再用，14:00 后停（Drake 2013）",
+        "不要用酒精助眠（Gardiner 2025）",
+        "不要指望周末一次还清（Van Dongen 2003）"
+      ] }
+  ],
+
+  "food": {
+    "helpSleep": [
+      { "item": "酸樱桃（Montmorency）", "level": "B",
+        "dose": "240mL 浓缩汁 ×2/日，连续 2 周；或睡前 1-2 小时约 240mL",
+        "effect": "PSG 总睡眠时间 +84 分钟；7 天后 TST +34 分钟、睡眠效率 +5-6%、尿 6-硫氧褪黑素 +17%",
+        "note": "褪黑素含量极低（约 0.135 µg/份，比补充剂低数百倍）——起作用的是抗炎成分 + 抑制色氨酸分解酶（IDO）",
+        "source": "Losso 2018; Howatson Eur J Nutr 2012; Pigeon 2010; PMC12438961" },
+      { "item": "猕猴桃", "level": "B",
+        "dose": "睡前 1 小时吃 2 个，连续 4 周",
+        "effect": "入睡潜伏期 -35.4%、夜醒 -28.9%、TST +13.4%、睡眠效率 +5.41%",
+        "source": "Lin HH et al. Asia Pac J Clin Nutr 2011" },
+      { "item": "核桃", "level": "B",
+        "dose": "晚餐加 40g/日，8 周",
+        "effect": "整体睡眠质量改善、入睡更快、白天嗜睡下降，尿褪黑素代谢物上升",
+        "source": "二手汇总，待核" },
+      { "item": "多脂鱼（三文鱼/鲭鱼/沙丁鱼）", "level": "C",
+        "dose": "每周 2-3 次",
+        "effect": "改善睡眠质量与日间功能，归因于维生素 D + ω-3",
+        "source": "二手汇总，待核" },
+      { "item": "镁", "level": "B/C",
+        "dose": "南瓜籽/菠菜/杏仁/黑豆/全谷物",
+        "effect": "缺乏者补充改善睡眠；CARDIA 队列 n=3964，5 年随访，高镁摄入者睡眠质量更好",
+        "source": "二手汇总，待核" },
+      { "item": "洋甘菊", "level": "B/C",
+        "effect": "芹菜素结合 GABA-A；对睡眠维持（易醒）效果优于入睡",
+        "source": "二手汇总，待核" }
+    ],
+    "mechanism": "色氨酸 + 碳水 → 血清素 → 褪黑素。单独吃蛋白质效果差（色氨酸需与其他氨基酸竞争转运）；需连续几天到几周才见效。",
+    "avoid": [
+      { "item": "咖啡因", "level": "A",
+        "rule": "睡前残留 = 摄入量 × 0.5^(距睡前小时数/半衰期)；经验阈值 睡前残留 <50mg",
+        "detail": "400mg 咖啡因在睡前 6 小时给予，客观测量总睡眠时间减少 1 小时以上，且被试自己感觉不到。半衰期 5-6 小时（范围 2-10）；慢代谢型 9-10 小时；孕妇 10+；口服避孕药 9-11。",
+        "conservative": "睡前 8-10 小时停；约 217mg 的剂量需 13 小时缓冲",
+        "source": "Drake C et al. J Clin Sleep Med 2013; Sleep Med Rev 2023 系统综述" },
+      { "item": "酒精", "level": "A",
+        "detail": "低剂量（<=0.5 g/kg，约 2 标准杯）就已减少 REM 并随剂量恶化；高剂量（>=0.85 g/kg，约 5 标准杯）才缩短入睡潜伏期。慢波睡眠前半夜增、后半夜减，时相结构被打乱。不存在安全的助眠饮酒剂量。",
+        "source": "Gardiner C et al. Sleep Med Rev 2025;80:102030 (PMID 39631226)" }
+    ]
+  },
+
+  "circadian": [
+    { "id": "morning-light", "level": "A",
+      "claim": "早晨光照是相位前移最强的手段；室内 300-500 lux 比户外暗 100-1000 倍",
+      "action": "醒后尽早户外 10-30 分钟；高纬度冬季用 10000 lux 灯箱 15-20 分钟" },
+
+    { "id": "evening-light", "level": "A",
+      "claim": "睡前 4 小时发光电子设备：褪黑素抑制约 55%，DLMO 延迟约 1.5 小时，REM 减少，次日晨间警觉性下降",
+      "detail": "n=12，14 天住院交叉设计。恢复需数天。约 200 lux 普通客厅照度即可抑制褪黑素约 50%。效应剂量依赖 + 波长特异，峰值在 460-490nm。暖色温能减弱但不能消除。",
+      "source": "Chang AM et al. PNAS 2015;112(4):1232-1237; Gooley JJ et al. JCEM 2011; Tähkämö L Chronobiol Int 2019;36(2):151-170",
+      "action": "睡前 2 小时起降亮度、拉距离、换暖光/红光" },
+
+    { "id": "blue-light-glasses", "level": "C",
+      "claim": "滤蓝光眼镜能否改善睡眠：无法确定",
+      "detail": "Cochrane 2023 CD013244：17 项 RCT、619 人，证据确定性极低，且没有一项研究测量血清褪黑素。",
+      "action": "不要作为主要卖点承诺" },
+
+    { "id": "social-jetlag", "level": "A",
+      "claim": "社会时差：69% 的人每周 >=1 小时，1/3 的人 >=2 小时",
+      "detail": "n=65000 欧洲成人。定义为工作日与休息日睡眠中点之差。校正睡眠时长后，社会时差大者更易超重。20 分钟以内是可容忍上限。节律紊乱 + 睡眠限制可致餐后高血糖与代谢减慢。",
+      "source": "Roenneberg T et al. Current Biology 2012; PMC10204006; Buxton OM Sci Transl Med 2012",
+      "action": "工作日与休息日**起床时间差控制在 1 小时以内**" },
+
+    { "id": "wake-maintenance-zone", "level": "A",
+      "claim": "禁睡区：习惯就寝前 2-3 小时，几乎不可能睡着",
+      "detail": "昼夜节律在傍晚发出全天最强清醒信号，对抗累积的睡眠压力。青少年更明显（DLMO 前后 4 小时窗口）。",
+      "source": "de Zeeuw J et al. Scientific Reports 2018;8:11012; Monterastelli AJ et al. PMID 39917052",
+      "action": "反直觉要点：想早睡不要提前躺下——那正好撞进禁睡区。应靠'早上提早起 + 见光'把节律整体前移。" },
+
+    { "id": "exercise-timing", "level": "A",
+      "claim": "运动结束距就寝 >=2 小时促进入睡；<2 小时尤其 <1 小时有害",
+      "detail": "15 项研究 meta：晚间运动整体未损害睡眠，反而 SWS +1.3 个百分点、N1 -0.9；例外是睡前 1 小时内的剧烈运动。晨型人做晚间高强度运动更易被打乱。",
+      "source": "Frimpong E et al. Sleep Med Rev 2021;60:101535; Stutz J Sports Medicine 2019;49(2):269-287",
+      "action": "规律中等强度有氧；睡前 3 小时不做剧烈运动" }
+  ],
+
+  "fallAsleep": [
+    { "id": "cbti", "level": "A",
+      "claim": "CBT-I 是慢性失眠最有效的一线治疗（4-8 次会谈）",
+      "components": [
+        { "name": "刺激控制", "detail": "只有困了才上床；躺 20 分钟睡不着就离开床；床只用于睡眠和性" },
+        { "name": "睡眠限制", "detail": "把卧床时间压缩到接近实际睡眠时间，再逐步延长" },
+        { "name": "放松训练", "detail": "渐进式肌肉放松、呼吸、冥想" }
+      ],
+      "honestNote": "AASM 明确：多数慢性失眠患者光靠'睡眠卫生'（戒咖啡、换床垫）不够。",
+      "source": "Buysse DJ et al. J Clin Sleep Med 2026; AASM 患者指南" },
+
+    { "id": "cognitive-shuffle", "level": "B",
+      "claim": "认知洗牌（序列多样想象）帮助入睡",
+      "howto": "选一个 >=5 字母、少重复字母的词（如 BLANKET）；按每个字母想若干以此为开头的词，每个词想象画面 5-15 秒然后换下一个；不找关联、不求意义。",
+      "principle": "失眠者睡前思维偏向担忧/计划/反刍；好睡眠者偏向梦样、非线性、视觉化。洗牌用随机意象模拟入睡前思维状态。",
+      "source": "Beaudoin LP et al. 2019; Lemyre A et al. Sleep Med Rev 2020;50:101253",
+      "action": "零成本，可做成站内引导器（词库 + 定时提示）" },
+
+    { "id": "breathing", "level": "B",
+      "variants": [
+        { "name": "缓慢呼吸 4-6 次/分", "evidence": "相对扎实：失眠者睡前 20 分钟慢呼吸改善入睡、减少夜醒（PSG 客观确认）", "source": "Tsai HJ et al. Psychophysiology 2015" },
+        { "name": "4-7-8（吸 4/屏 7/呼 8）", "evidence": "机制合理但缺大规模 RCT；正面结果多来自小样本或特定人群", "source": "标注待核" },
+        { "name": "生理性叹息（双吸 + 长呼）", "evidence": "5 分钟降焦虑优于正念冥想（测的是日间压力，非睡眠）", "source": "Balban MY et al. Cell Reports Medicine 2023" },
+        { "name": "简单版：呼气 = 吸气 ×2", "evidence": "不屏息，最易执行", "source": "-" }
+      ],
+      "safety": "有哮喘、COPD 等呼吸系统疾病者，做屏息类练习前先问医生；出现头晕就缩短或跳过屏息。" },
+
+    { "id": "thermoregulation", "level": "A",
+      "claim": "睡前 1-2 小时热水澡（40-42.5℃，10-20 分钟）平均缩短入睡约 10 分钟",
+      "detail": "17 项研究（13 项入 meta）。机制是'热浴悖论'：热水把血液推向末梢，出来后散热更快，核心体温下降更早。核心体温需下降 1-2°F 才能入睡；在热中性区内仅 0.4℃ 的皮肤温度操纵就能可靠改变入睡潜伏期。",
+      "source": "Haghayegh S et al. Sleep Med Rev 2019;46:124-135 (PMID 31102877); Raymann RJ et al.",
+      "action": "泡澡倒计时功能：就寝前 90 分钟提醒" },
+
+    { "id": "environment", "level": "A",
+      "items": [
+        { "dim": "温度（成人）", "value": "18-20℃ / 65-68°F", "note": "可接受 15-22℃" },
+        { "dim": "温度（老年人）", "value": "20-25℃ / 68-77°F", "note": "11,000 夜数据；77→86°F 睡眠效率掉 5-10%", "source": "Baniassadi A Sci Total Environ 2023" },
+        { "dim": "湿度", "value": "30-50%", "level": "C" },
+        { "dim": "光", "value": "尽可能黑，遮光帘", "level": "A" },
+        { "dim": "脚部", "value": "别捂太严——末梢散热是入睡通路；冷脚可穿薄袜促血管扩张", "level": "B" },
+        { "dim": "热环境危害", "value": "热暴露增加觉醒、减少 SWS 与 REM；湿热比干热更糟", "source": "Okamoto-Mizuno & Mizuno, J Physiol Anthropol 2012" }
+      ] },
+
+    { "id": "yoga-nidra", "level": "C",
+      "claim": "瑜伽尼德拉 / NSDR 对失眠的疗效：证据确定性极低",
+      "detail": "2026 meta 汇总 RCT 后对睡眠质量与失眠严重度均无统计学显著。单项最引用研究（Datta 2021，41 人 vs CBT-I）两组都改善，但属小样本先导。'NSDR 替代睡眠''1 小时顶 4 小时'为民间隔说法，无试验支持。",
+      "action": "可作为放松手段推荐，不要宣称治疗失眠" }
+  ],
+
+  "myths": [
+    { "id": "myth-90min", "claim": "睡眠必须是 90 分钟的整数倍",
+      "reality": "周期 70-120 分钟，中位数 96，个体与同夜内都不同；后半夜根本不会再进入深睡，所以清晨醒来本来就不在深睡。",
+      "level": "A" },
+    { "id": "myth-cinderella", "claim": "22:00-02:00 是必须睡的'美容觉'时间",
+      "reality": "生长激素在入睡后约 90 分钟开始分泌，并没有固定的钟点窗口。",
+      "level": "C" },
+    { "id": "myth-weekend", "claim": "周末睡懒觉可以把一周的觉补回来",
+      "reality": "一晚补不回（Banks 2010）；而且周末起床时间后移会造成社会时差（Roenneberg 2012），并可能加重代谢紊乱（Depner）。",
+      "level": "A" },
+    { "id": "myth-earlier-bed", "claim": "早睡一小时就能睡得更多",
+      "reality": "习惯就寝前 2-3 小时是禁睡区（WMZ），此时强行躺下最难入睡，还会给床建立'清醒'的条件反射。要前移节律应靠早上见光。",
+      "level": "A" },
+    { "id": "myth-caffeine-ok", "claim": "我喝咖啡照样睡，说明咖啡对我没影响",
+      "reality": "Drake 2013：睡前 6 小时的 400mg 咖啡因让客观总睡眠时间减少 1 小时以上，而主观上感觉不到。",
+      "level": "A" },
+    { "id": "myth-alcohol", "claim": "睡前喝酒助眠",
+      "reality": "高剂量才缩短入睡时间，但低剂量就已减少 REM 并打乱慢波睡眠时相分布。",
+      "level": "A" },
+    { "id": "myth-tracker", "claim": "手环测出的睡眠分期很准",
+      "reality": "消费级设备与 PSG 对比，基础分期（睡/醒、浅/深）准确率约 70-80%，用于精确定位周期边界远不够。",
+      "level": "C" }
+  ],
+
+  "clinicalBoundary": {
+    "insomniaPrevalence": "成人 10-15%",
+    "chinaDefinition": "持续 3 周且每周 >=4 次的睡眠问题才算失眠，需尽快干预（中国睡眠研究会）",
+    "healthySleepDimensions": ["时长", "质量", "入睡时间", "规律性"],
+    "healthyMarkers": "入睡 <=30 分钟；夜醒 <=3 次且能 20 分钟内再入睡；醒后精神饱满",
+    "source": "全国爱卫办 睡眠健康核心信息；中国睡眠研究会"
+  },
+
+  "references": [
+    { "id": 1, "cite": "Watson NF et al. Recommended Amount of Sleep for a Healthy Adult: A Joint Consensus Statement of AASM and SRS. J Clin Sleep Med 2015;11(6):591-592", "doi": "10.5664/jcsm.4758" },
+    { "id": 2, "cite": "Van Dongen HPA, Maislin G, Mullington JM, Dinges DF. The cumulative cost of additional wakefulness. Sleep 2003;26(2):117-26", "pmid": "12683469" },
+    { "id": 3, "cite": "Banks S, Van Dongen HPA, Maislin G, Dinges DF. Neurobehavioral dynamics following chronic sleep restriction. Sleep 2010;33(8):1013-1026" },
+    { "id": 4, "cite": "Drake C et al. Caffeine Effects on Sleep Taken 0, 3, or 6 Hours before Going to Bed. J Clin Sleep Med 2013" },
+    { "id": 5, "cite": "Chang AM, Aeschbach D, Duffy JF, Czeisler CA. Evening use of light-emitting eReaders negatively affects sleep, circadian timing, and next-morning alertness. PNAS 2015;112(4):1232-1237" },
+    { "id": 6, "cite": "Gooley JJ et al. Exposure to room light before bedtime suppresses melatonin onset. J Clin Endocrinol Metab 2011" },
+    { "id": 7, "cite": "Tähkämö L, Partonen T, Pesonen A-K. Systematic review of light exposure impact on human circadian rhythm. Chronobiol Int 2019;36(2):151-170" },
+    { "id": 8, "cite": "Roenneberg T, Allebrandt KV, Merrow M, Vetter C. Social jetlag and obesity. Current Biology 2012" },
+    { "id": 9, "cite": "de Zeeuw J et al. The alerting effect of the wake maintenance zone during 40 hours of sleep deprivation. Scientific Reports 2018;8:11012" },
+    { "id": 10, "cite": "Haghayegh S et al. Before-bedtime passive body heating by warm shower or bath to improve sleep. Sleep Med Rev 2019;46:124-135", "pmid": "31102877" },
+    { "id": 11, "cite": "Gardiner C et al. The effect of alcohol on subsequent sleep in healthy adults: systematic review and meta-analysis. Sleep Med Rev 2025;80:102030", "pmid": "39631226" },
+    { "id": 12, "cite": "Frimpong E, Mograss M, Zvionow T, Dang-Vu TT. The effects of evening high-intensity exercise on sleep in healthy adults. Sleep Med Rev 2021;60:101535" },
+    { "id": 13, "cite": "Stutz J, Eiholzer R, Spengler CM. Effects of Evening Exercise on Sleep in Healthy Participants. Sports Medicine 2019;49(2):269-287" },
+    { "id": 14, "cite": "Lemyre A, Belzile F, Landry M, Bastien CH, Beaudoin LP. Pre-sleep cognitive activity in adults: A systematic review. Sleep Med Rev 2020;50:101253", "pmid": "31918338" },
+    { "id": 15, "cite": "Singh S et al. Blue-light filtering spectacle lenses (Review). Cochrane Database Syst Rev 2023;CD013244" },
+    { "id": 16, "cite": "Buysse DJ et al. Combination treatment for chronic insomnia disorder in adults: an AASM clinical practice guideline. J Clin Sleep Med 2026" },
+    { "id": 17, "cite": "Lin HH et al. Effect of kiwifruit consumption on sleep quality in adults with sleep problems. Asia Pac J Clin Nutr 2011" },
+    { "id": 18, "cite": "Okamoto-Mizuno K, Mizuno K. Effects of thermal environment on sleep and circadian rhythm. J Physiol Anthropol 2012" },
+    { "id": 19, "cite": "Baniassadi A et al. Nighttime bedroom temperature and sleep in older adults. Sci Total Environ 2023" },
+    { "id": 20, "cite": "Balban MY et al. Brief structured respiration practices enhance mood and reduce physiological arousal. Cell Reports Medicine 2023" },
+    { "id": 21, "cite": "Rosekind MR et al. Alertness management: strategic naps in operational settings. J Sleep Res 1995 (NASA TM 1994)" },
+    { "id": 22, "cite": "Ohayon MM et al. Meta-Analysis of Quantitative Sleep Parameters From Childhood to Old Age. Sleep 2004" },
+    { "id": 23, "cite": "健康中国行动（2019—2030 年）", "note": "成人日均睡眠 7-8 小时" },
+    { "id": 24, "cite": "全国爱卫办 睡眠健康核心信息（2025）" },
+    { "id": 25, "cite": "中国睡眠研究会 2024 中国居民睡眠健康白皮书" }
+  ]
+}
