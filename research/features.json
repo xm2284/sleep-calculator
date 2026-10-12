@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "product": "睡眠助手",
+    "form": "单页滚动站点（GitHub Pages）",
+    "principle": "打开就算，算完就走。不注册、不记录、不多步流程。",
+    "filters": ["证据必须 A 级（B 级仅保留该领域最经典的两个）", "打开就能用，每个功能输 1-2 个值即出结论"],
+    "count": { "kept": 8, "cut": 29 },
+    "updated": "2026-10-12"
+  },
+
+  "features": [
+    {
+      "id": 1,
+      "group": "核心",
+      "name": "今晚几点睡",
+      "level": "A",
+      "inputs": ["明天几点起"],
+      "outputs": ["6 周期 9h", "5 周期 7.5h（推荐）", "4 周期 6h"],
+      "note": "只给 3 个候选，覆盖 99% 场景；周期长度与入睡潜伏期折叠在「微调」里，默认 90/15，不改也能用",
+      "source": "AASM/SRS 2015 共识；Ohayon 2004；PSG 周期回顾研究（中位数 96 分钟）",
+      "impl": "已有 sleep-core.js 的 bedtimesFor()"
+    },
+    {
+      "id": 2,
+      "group": "工具",
+      "name": "咖啡因截止线",
+      "level": "A",
+      "inputs": ["饮品（含 mg）", "喝的时间", "预计就寝时间"],
+      "outputs": ["就寝时血中残留量 + 一句话结论", "衰减曲线"],
+      "note": "全市场空白功能；阈值 50mg；半衰期默认 5h",
+      "source": "Drake C et al. J Clin Sleep Med 2013",
+      "impl": "sleep-core.js 的 caffeineCutoff()；曲线用 Canvas 画指数衰减，约 20 行"
+    },
+    {
+      "id": 3,
+      "group": "工具",
+      "name": "小睡几分",
+      "level": "B",
+      "inputs": ["点一下（现在开始）"],
+      "outputs": ["该几点醒"],
+      "note": "只两档：20 分钟（清爽）/ 26 分钟（NASA）。砍掉 60/90 档，醒来容易发懵",
+      "source": "Rosekind MR et al. NASA TM 1994 / J Sleep Res 1995",
+      "impl": "sleep-core.js 的 napPlan()"
+    },
+    {
+      "id": 4,
+      "group": "工具",
+      "name": "熬夜急救",
+      "level": "A",
+      "inputs": [],
+      "outputs": ["一屏 6 条卡片，无流程"],
+      "note": "当晚提前睡 / 早上见光 / 午后小睡 26 分 / 咖啡因 14 点后停 / 别用酒 / 别指望周末补",
+      "source": "Van Dongen 2003 Sleep；Banks 2010 Sleep",
+      "impl": "纯静态卡片"
+    },
+    {
+      "id": 5,
+      "group": "工具",
+      "name": "泡澡提醒",
+      "level": "A",
+      "inputs": ["点「现在开始」"],
+      "outputs": ["10 分钟倒计时"],
+      "note": "一句话 + 一个计时器：睡前 90 分钟泡 10-20 分钟热水澡，平均快 10 分钟入睡",
+      "source": "Haghayegh S et al. Sleep Med Rev 2019;46:124-135",
+      "impl": "setInterval + 一行文案"
+    },
+    {
+      "id": 6,
+      "group": "内容",
+      "name": "认知洗牌",
+      "level": "B",
+      "inputs": ["点「开始」"],
+      "outputs": ["逐字显示，每 8 秒自动切换联想词"],
+      "note": "用户什么都不用做，看着就行；睡着就睡着",
+      "source": "Beaudoin LP et al. 2019；Lemyre A et al. Sleep Med Rev 2020;50:101253",
+      "impl": "词库数组 + setInterval"
+    },
+    {
+      "id": 7,
+      "group": "内容",
+      "name": "7 条被说错的睡眠常识",
+      "level": "A",
+      "inputs": [],
+      "outputs": ["7 张折叠卡：误区 → 真相"],
+      "note": "1) 90 分钟整数倍 2) 周末补觉 3) 早睡一小时 4) 咖啡因无感 5) 酒精助眠 6) 手环精度 7) 蓝光眼镜",
+      "source": "见 睡眠科学权威依据库.md 第 7 节引用清单",
+      "impl": "纯静态折叠卡（details/summary）"
+    },
+    {
+      "id": 8,
+      "group": "内容",
+      "name": "依据与出处",
+      "level": "A",
+      "inputs": [],
+      "outputs": ["核心结论 + 可点开原始出处（DOI/PMID）"],
+      "note": "全站最核心的差异点：每条结论可溯源",
+      "source": "-",
+      "impl": "静态列表"
+    }
+  ],
+
+  "cut": [
+    { "item": "睡眠日记（9 项标准字段）", "reason": "每天填 9 项，太重；自己用不是给医生看" },
+    { "item": "睡眠负债账本", "reason": "要连续记录好几天才有意义" },
+    { "item": "社会时差", "reason": "要输入工作日+休息日两组数据" },
+    { "item": "趋势图表 / 周复盘", "reason": "依赖历史数据积累" },
+    { "item": "睡眠效率闭环（SE 调窗口）", "reason": "本质是 CBT-I 治疗手段，越界" },
+    { "item": "呼吸引导 4-7-8", "reason": "证据只有 B/C，且结论混乱" },
+    { "item": "光照提醒", "reason": "要定位权限 + 每日推送" },
+    { "item": "卧室温度四段协议", "reason": "四段温控太复杂；降为首页一行小字" },
+    { "item": "睡眠卫生 daily 打卡", "reason": "又一个每日负担" },
+    { "item": "数据导出 / 分享卡", "reason": "自己用不上" },
+    { "item": "4 步引导 onboarding", "reason": "删除，打开就能算" },
+    { "item": "智能闹钟", "reason": "网页做不到真正唤醒" },
+    { "item": "睡前降速流水线（六段）", "reason": "太像待办清单，砍成泡澡那一条" },
+    { "item": "SRI / 时差调整 / 伴侣对齐 / 轮班模式", "reason": "场景小众" },
+    { "item": "自评问卷 / 个性化洞察", "reason": "要数据积累" },
+    { "item": "白噪音 / 冥想音频 / 睡眠监测 / 阶段图 / 睡眠总分 / 连胜机制", "reason": "见红线" }
+  ],
+
+  "redlines": [
+    "不做睡眠监测（网页做不到，手机方案精度仅 70-80%）",
+    "不做白噪音/冥想音频（红海且证据只有 B/C）",
+    "不做睡眠阶段图（没有真传感器就是编数据）",
+    "不做睡眠总分（引发睡眠表现焦虑，科学上站不住）",
+    "不做连胜/打卡天数（断一次就想卸载，最大流失源）",
+    "不要求注册登录",
+    "不做每日提醒推送",
+    "不给医疗建议"
+  ],
+
+  "layout": {
+    "type": "single-page-scroll",
+    "tabs": 0,
+    "sections": [
+      { "name": "今晚几点睡", "content": "一个时间输入 + 3 个候选结果 + 折叠的「微调」" },
+      { "name": "工具四卡", "content": "咖啡因 / 小睡 / 熬夜急救 / 泡澡，2×2 网格，点开是浮层" },
+      { "name": "认知洗牌", "content": "一个开始按钮" },
+      { "name": "内容", "content": "7 条误区 + 依据出处（折叠）" },
+      { "name": "页脚", "content": "一行小字：卧室 18-20℃，脚别捂太严。" }
+    ]
+  },
+
+  "evidenceSummary": {
+    "A": 6,
+    "B": 2,
+    "C": 0,
+    "note": "B 级两项是该领域最经典的单项研究（NASA 小睡、认知洗牌），无同等量级的 A 级替代品"
+  },
+
+  "implementation": {
+    "stack": "原生 HTML + CSS + JS",
+    "files": ["index.html", "sleep-core.js"],
+    "dependencies": 0,
+    "backend": false,
+    "buildStep": false,
+    "deploy": "直接推 GitHub Pages",
+    "reuse": "sleep-core.js 已含 bedtimesFor / napPlan / caffeineCutoff / sleepDebt / socialJetlag"
+  }
+}
