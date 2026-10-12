@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14100a">
+<meta name="description" content="该几点睡、该几点起，按 90 分钟睡眠周期一次算清；附熬夜急救指南。">
+<meta property="og:title" content="几点睡 · 睡完整周期再醒">
+<meta property="og:description" content="按 90 分钟睡眠周期算最佳入睡与醒来时刻，附熬夜急救指南。">
+<title>几点睡 · 该几点睡，该几点起</title>
+<style>
+  :root{
+    color-scheme:dark;
+    --bg1:#171209;
+    --bg2:#241b0e;
+    --bg3:#0f0c06;
+    --text:#f2ead9;
+    --muted:#a3937a;
+    --faint:#6f6350;
+    --card:rgba(242,234,217,.045);
+    --card-border:rgba(242,234,217,.1);
+    --panel:rgba(255,248,235,.05);
+    --accent:#e8a54b;
+    --accent-soft:rgba(232,165,75,.14);
+    --best:#8fc97a;
+    --best-soft:rgba(143,201,122,.14);
+    --warn:#e2b45a;
+    --low:#d98a6a;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --radius-sm:13px;
+    --spring:cubic-bezier(.175,.885,.32,1.275);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    min-height:100vh;
+    min-height:100dvh;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    font-size:clamp(.95rem,.9rem+.35vw,1.05rem);
+    color:var(--text);
+    background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 52%,var(--bg3) 100%);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .sky{position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 18% 12%,rgba(255,244,220,.95),transparent),
+      radial-gradient(1px 1px at 66% 7%,rgba(255,244,220,.8),transparent),
+      radial-gradient(1px 1px at 86% 26%,rgba(255,244,220,.6),transparent),
+      radial-gradient(1.5px 1.5px at 44% 30%,rgba(255,244,220,.75),transparent),
+      radial-gradient(1px 1px at 8% 42%,rgba(255,244,220,.5),transparent),
+      radial-gradient(1px 1px at 30% 58%,rgba(255,244,220,.45),transparent),
+      radial-gradient(1.5px 1.5px at 92% 48%,rgba(255,244,220,.6),transparent),
+      radial-gradient(1px 1px at 58% 74%,rgba(255,244,220,.4),transparent),
+      radial-gradient(1px 1px at 76% 82%,rgba(255,244,220,.35),transparent);
+  }
+  .hills,.hills::before,.hills::after{
+    position:fixed;left:0;right:0;bottom:0;z-index:-1;pointer-events:none;
+    background-repeat:repeat-x;
+  }
+  .hills{height:150px;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150'><polygon fill='%23261d10' points='0,90 90,40 180,100 300,20 420,85 540,35 660,95 780,50 900,90 900,150 0,150'/></svg>");
+    background-size:900px 150px;}
+  .hills::before{content:"";height:105px;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 105'><polygon fill='%231b150b' points='0,60 120,90 240,30 380,75 520,25 640,65 700,55 700,105 0,105'/></svg>");
+    background-size:700px 105px;background-position:140px bottom;}
+  .hills::after{content:"";height:64px;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 64'><polygon fill='%23100c05' points='0,38 100,55 210,18 330,48 440,14 500,36 500,64 0,64'/></svg>");
+    background-size:500px 64px;background-position:60px bottom;}
+  .meteor{
+    position:fixed;top:12%;left:-6%;width:clamp(80px,11vmax,130px);height:2px;z-index:-1;
+    border-radius:99px;pointer-events:none;
+    background:linear-gradient(90deg,rgba(255,238,205,.9),transparent);
+    transform-origin:left center;opacity:0;
+    animation:shoot 11s linear infinite 4s;
+  }
+  @keyframes shoot{
+    0%{transform:rotate(17deg) translateX(0);opacity:0}
+    1%{opacity:.9}
+    9%,100%{transform:rotate(17deg) translateX(88vmax);opacity:0}
+  }
+
+  main{
+    min-height:100vh;
+    min-height:100dvh;
+    width:100%;max-width:480px;margin:0 auto;
+    padding:max(1.4rem,env(safe-area-inset-top)) 1.25rem max(1.2rem,env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;gap:14px;
+  }
+
+  .head{text-align:center;margin-top:6px;animation:rise .6s var(--spring) both}
+  .head .emoji{font-size:clamp(40px,11vw,52px);display:inline-block;animation:floaty 5s ease-in-out infinite}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+  .head h1{font-size:clamp(26px,7.5vw,34px);font-weight:800;letter-spacing:.01em;margin-top:2px}
+  .head p{color:var(--muted);font-size:clamp(13px,3.8vw,15px);margin-top:4px}
+
+  .live{
+    display:flex;justify-content:center;align-items:baseline;gap:8px;flex-wrap:wrap;
+    font-size:clamp(13px,3.6vw,14.5px);color:var(--muted);
+    font-variant-numeric:tabular-nums;text-align:center;
+    animation:rise .6s .08s var(--spring) both;
+  }
+  .live b{color:var(--text);font-weight:600}
+  .live .pill-num{color:var(--accent);font-weight:700}
+
+  /* ── 区块 ── */
+  .block{
+    background:var(--panel);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);
+    padding:clamp(18px,4.5vw,24px);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+  .block:nth-of-type(1){animation:rise .6s .14s var(--spring) both}
+  .block:nth-of-type(2){animation:rise .6s .22s var(--spring) both}
+  .bh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .bt{font-size:clamp(17px,4.6vw,19px);font-weight:800;letter-spacing:.01em}
+  .bt em{font-style:normal;color:var(--accent)}
+  .bs{font-size:12.5px;color:var(--faint)}
+
+  .inputRow{display:flex;align-items:center;gap:10px;margin-bottom:2px;flex-wrap:wrap}
+  .inputRow .lab{font-size:13px;color:var(--muted);white-space:nowrap}
+  .bigTime{
+    font-size:clamp(30px,8.5vw,38px);font-weight:800;letter-spacing:2px;
+    font-variant-numeric:tabular-nums;color:var(--accent);
+    background:rgba(0,0,0,.22);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius-sm);
+    padding:6px 18px;line-height:1.3;
+    transition:.2s var(--spring);
+  }
+  .bigTime.swap{animation:swap .3s var(--spring)}
+  @keyframes swap{0%{opacity:0;transform:translateY(6px) scale(.97)}100%{opacity:1;transform:none}}
+  .inputRow .note{font-size:12.5px;color:var(--faint)}
+
+  /* ── 半小时胶囊 ── */
+  .chips{
+    display:flex;gap:9px;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:14px 34px 12px;margin:8px -34px 4px;
+    scrollbar-width:none;
+    -webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+            mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;width:70px;padding:10px 0;text-align:center;
+    border:1px solid var(--card-border);border-radius:15px;
+    background:var(--card);color:var(--muted);
+    font:inherit;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;
+    cursor:pointer;transition:.2s var(--spring);
+  }
+  .chip small{display:block;font-size:10px;font-weight:600;color:var(--faint);letter-spacing:.05em;margin-top:1px}
+  .chip:hover{color:var(--text);border-color:rgba(242,234,217,.25);transform:translateY(-2px)}
+  .chip:active{transform:scale(.93)}
+  .chip.on{
+    background:var(--accent);color:#1c150a;border-color:transparent;
+    box-shadow:0 8px 22px rgba(232,165,75,.25);
+    transform:scale(1.07);
+  }
+  .chip.on small{color:#1c150a;opacity:.65}
+  @media (max-width:360px){
+    .chip{width:62px;font-size:15px}
+    .chips{gap:7px}
+    .item{padding:13px 12px;gap:8px}
+    .item .time{font-size:23px}
+    .item .time small{display:block;margin:2px 0 0}
+  }
+
+  /* ── 结果行 ── */
+  .rows{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .item{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-left:7px solid var(--faint);
+    border-radius:var(--radius-md);
+    padding:15px clamp(14px,4vw,18px);
+    opacity:0;transform:translateY(14px);
+    animation:rise .45s var(--spring) forwards;
+    transition:transform .25s var(--spring),background .3s;
+  }
+  .item:hover{transform:translateY(-2px);background:var(--panel)}
+  .item .time{
+    font-size:clamp(26px,7.5vw,31px);font-weight:800;letter-spacing:2px;
+    font-variant-numeric:tabular-nums;line-height:1.15;
+  }
+  .item .time small{font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-left:7px}
+  .item .right{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+  .item .cycles{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+  .item.best{
+    border-left-color:var(--best);
+    background:linear-gradient(135deg,var(--best-soft),rgba(143,201,122,.05));
+  }
+  .item.best .time{color:var(--best)}
+  .item.best .cycles{color:var(--best)}
+  .badge{
+    display:inline-block;margin-left:8px;vertical-align:1px;
+    font-size:10.5px;font-weight:800;letter-spacing:.06em;
+    color:#1c150a;background:var(--best);
+    padding:2px 9px;border-radius:99px;
+  }
+  .alarm{
+    border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:800;
+    padding:7px 14px;border-radius:var(--radius-sm);
+    background:var(--accent-soft);color:var(--accent);
+    transition:.2s var(--spring);white-space:nowrap;
+  }
+  .alarm:hover{background:var(--accent);color:#1c150a;transform:translateY(-2px)}
+
+  /* 现在算 */
+  .nowRow{display:flex;justify-content:center;margin-top:14px}
+  .nowBtn{
+    border:1px dashed rgba(232,165,75,.45);background:none;color:var(--accent);
+    font:inherit;font-size:14px;font-weight:700;
+    padding:10px 22px;border-radius:999px;cursor:pointer;
+    transition:.2s var(--spring);
+  }
+  .nowBtn:hover{background:var(--accent-soft)}
+  .nowBtn:active{transform:scale(.96)}
+
+  /* ── 微调 ── */
+  .tune{margin-top:20px;border-top:1px solid var(--card-border);padding-top:14px}
+  .tuneToggle{
+    width:100%;background:none;border:0;color:var(--muted);cursor:pointer;
+    font:inherit;font-size:13px;letter-spacing:.05em;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .tuneToggle .chev{transition:transform .3s var(--spring)}
+  .tune.open .chev{transform:rotate(180deg)}
+  .tuneBody{max-height:0;overflow:hidden;transition:max-height .45s var(--spring)}
+  .tune.open .tuneBody{max-height:420px}
+  .sl{margin-top:18px}
+  .slHead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .slHead .lab{color:var(--muted);font-size:13.5px}
+  .slHead .v{font-weight:800;font-variant-numeric:tabular-nums;transition:color .3s}
+  .v.ok{color:var(--best)} .v.mid{color:var(--warn)} .v.bad{color:var(--low)}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:6px;
+    background:linear-gradient(90deg,var(--best) 0%,var(--warn) 55%,var(--low) 100%);
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.25);outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:32px;height:32px;border-radius:50%;
+    background:#fff8ec;border:4px solid var(--accent);
+    box-shadow:0 6px 16px rgba(0,0,0,.35);cursor:grab;
+    transition:transform .2s var(--spring),box-shadow .2s;
+  }
+  input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15);cursor:grabbing}
+  input[type=range]:focus-visible{outline:none}
+  input[type=range]:focus-visible::-webkit-slider-thumb{
+    box-shadow:0 0 0 4px var(--accent-soft),0 0 18px rgba(232,165,75,.7);
+  }
+  input[type=range]::-moz-range-thumb{width:26px;height:26px;border:4px solid var(--accent);border-radius:50%;background:#fff8ec}
+  input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px var(--accent-soft)}
+  .slHints{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin-top:6px}
+
+  /* ── 熬夜 ── */
+  details{border-top:1px solid var(--card-border);padding-top:16px;animation:rise .5s .3s var(--spring) both}
+  summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;
+    font-weight:700;font-size:15px}
+  summary::-webkit-details-marker{display:none}
+  summary .chev{transition:transform .3s var(--spring);color:var(--muted)}
+  details[open] summary .chev{transform:rotate(180deg)}
+  .plan{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;gap:14px;align-items:baseline}
+  .row .when{flex:0 0 74px;color:var(--accent);font-weight:800;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .row .what{flex:1;font-size:14px;line-height:1.55}
+  .row .what span{color:var(--muted)}
+  .foot-note{margin-top:14px;color:var(--muted);font-size:12.5px;line-height:1.7}
+
+  footer{
+    margin-top:10px;text-align:center;color:var(--faint);
+    font-size:12px;line-height:1.8;animation:rise .5s .4s var(--spring) both;
+    text-shadow:0 1px 8px rgba(10,7,2,.9);
+  }
+  footer .disc{color:#857763;margin-bottom:6px}
+
+  .toast{
+    position:fixed;left:50%;bottom:32px;transform:translateX(-50%);
+    background:#f2ead9;color:#1c150a;padding:11px 20px;border-radius:99px;
+    font-size:13px;font-weight:700;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.4);
+    max-width:86vw;text-align:center;
+    animation:rise .3s var(--spring) both;
+  }
+
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  /* ── 桌面适配：≥820px 双列 ── */
+  @media (min-width:820px){
+    main{
+      max-width:1040px;
+      padding:52px 44px 60px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:start;
+      gap:18px;
+    }
+    .head,.live,.tune,details,footer{grid-column:1/-1}
+    .head{margin-top:0;text-align:left;display:flex;align-items:center;justify-content:center;gap:22px}
+    .head .emoji{font-size:56px}
+    .head h1{font-size:38px}
+    .head p{margin-top:2px}
+    .live{justify-content:center;font-size:15px}
+    .block{padding:26px 28px}
+    .item{padding:18px 22px}
+    .item .time{font-size:32px}
+    .tuneBody{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;max-height:none}
+    .tune.open .tuneBody{max-height:none}
+    .sl{margin-top:14px}
+    details{padding-top:18px}
+    .plan{display:grid;grid-template-columns:1fr 1fr;gap:10px 32px}
+    .foot-note{grid-column:1/-1}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="hills"></div>
+<div class="meteor"></div>
+
+<main>
+
+  <div class="head">
+    <span class="emoji">🌙</span>
+    <h1>几点睡</h1>
+    <p>睡完整周期再醒，起床往往更轻松</p>
+  </div>
+
+  <div class="live">现在 <b id="clock">--:--</b> · 今晚推荐 <b class="pill-num" id="liveBed">--:--</b> 睡 · 明早 <b id="liveWake">--:--</b> 起</div>
+
+  <!-- 区块一：该几点睡 -->
+  <section class="block">
+    <div class="bh">
+      <span class="bt">该几点<em>睡</em></span>
+      <span class="bs">按你明早的闹钟倒推</span>
+    </div>
+    <div class="inputRow">
+      <span class="lab">明早闹钟</span>
+      <span class="bigTime" id="alarmShow">07:00</span>
+    </div>
+    <div class="chips" id="chipsA"></div>
+    <div class="rows" id="rowsA"></div>
+  </section>
+
+  <!-- 区块二：该几点起 -->
+  <section class="block">
+    <div class="bh">
+      <span class="bt">该几点<em>起</em></span>
+      <span class="bs">按你今晚的上床时间顺推</span>
+    </div>
+    <div class="inputRow">
+      <span class="lab">今晚几点上床</span>
+      <span class="bigTime" id="bedShow">23:00</span>
+    </div>
+    <div class="chips" id="chipsB"></div>
+    <div class="rows" id="rowsB"></div>
+    <div class="nowRow">
+      <button class="nowBtn" id="nowBtn">已经躺下了？按现在算</button>
+    </div>
+  </section>
+
+  <div class="tune" id="tune">
+    <button class="tuneToggle" id="tuneToggle" aria-expanded="false" aria-controls="tuneBody"><span>微调：躺下到睡着 & 周期长度</span><span class="chev">▾</span></button>
+    <div class="tuneBody" id="tuneBody">
+      <div class="sl">
+        <div class="slHead"><span class="lab">躺下多久能睡着</span><span class="v ok" id="latV">15 分钟</span></div>
+        <input type="range" id="lat" min="5" max="60" step="5" value="15">
+        <div class="slHints"><span>偏快（5分·长期如此可能睡不够）</span><span>严重困难 (60分)</span></div>
+      </div>
+      <div class="sl">
+        <div class="slHead"><span class="lab">一个睡眠周期</span><span class="v" id="cycV">90 分钟</span></div>
+        <input type="range" id="cyc" min="70" max="120" step="5" value="90">
+        <div class="slHints"><span>人群均值 90 · 个体 70–120</span></div>
+      </div>
+    </div>
+  </div>
+
+  <details>
+    <summary>熬夜了怎么办<span class="chev">▾</span></summary>
+    <div class="plan">
+      <div class="row"><div class="when">明早</div><div class="what">闹钟照旧，<span>不许赖床。起床时间是锚点，一乱全乱。</span></div></div>
+      <div class="row"><div class="when">13:00 前</div><div class="what">小睡 20–25 分钟，<span>不要更久更晚，否则偷走今晚的睡意。</span></div></div>
+      <div class="row"><div class="when">14:00 后</div><div class="what">咖啡停。<span>半衰期 5–6 小时，睡前 6 小时喝仍会少睡 1 小时。</span></div></div>
+      <div class="row"><div class="when">今晚</div><div class="what">比平时早 1 小时躺下，<span>分期还债，一次补太多反而睡不着。</span></div></div>
+      <div class="row"><div class="when">今晚</div><div class="what">不喝酒。<span>酒精只让你快点晕，REM 照样减。</span></div></div>
+      <div class="row"><div class="when">周末</div><div class="what">起床别比工作日晚超 1 小时，<span>不然就是给自己造时差。</span></div></div>
+      <div class="foot-note">欠下的觉一晚补不回来：连熬五晚后就算给你 10 小时卧床，第二天认知表现仍回不到基线（Banks et al., Sleep 2010）；而连续多晚只睡 6 小时，欠账会悄悄累积（Van Dongen et al., Sleep 2003）——最坑的是你自己感觉不到。</div>
+    </div>
+  </details>
+
+  <footer>
+    <div class="disc">结果是规划，不是预测——周期长度因人而异，以自己醒来的感觉为准。</div>
+    周期按人群均值 90 分钟估算 · 成人推荐睡 7 小时以上（约 5 个周期起，AASM/SRS 2015）<br>
+    依据：AASM/SRS 2015 · Van Dongen 2003 · Banks 2010 · Drake 2013 · Roenneberg 2012
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  var D = document, $ = function(id){ return D.getElementById(id); };
+
+  /* ── 状态 ── */
+  var alarmMin = 7*60;      // 区块一：明早闹钟
+  var bedMin   = 23*60;     // 区块二：今晚 上床
+  var cycleMin = 90, latencyMin = 15;
+
+  function toMin(s){ var p = s.split(':'); return parseInt(p[0],10)*60 + parseInt(p[1],10); }
+  function fmt(m){ m = ((m % 1440) + 1440) % 1440; var h = Math.floor(m/60), mi = m%60; return (h<10?'0':'')+h+':'+(mi<10?'0':'')+mi; }
+  function normHM(m){ return Math.floor((((m%1440)+1440)%1440)/60); }
+  function periodCN(h){
+    if (h < 6) return '凌晨'; if (h < 9) return '早上'; if (h < 12) return '上午';
+    if (h < 13) return '中午'; if (h < 18) return '下午'; if (h < 22) return '晚上';
+    return '深夜';
+  }
+  function human(min){
+    min = Math.abs(Math.round(min));
+    var h = Math.floor(min/60), m = min%60;
+    if (h === 0) return m + ' 分钟';
+    if (m === 0) return h + ' 小时';
+    return h + ' 小时 ' + m + ' 分';
+  }
+  function cycleLabel(n){
+    if (n === 5) return '推荐';
+    if (n === 6) return '充足';
+    if (n === 4) return '勉强够';
+    return '偏少';
+  }
+
+  /* ── 持久化 ── */
+  function save(){
+    try{
+      localStorage.setItem('sleepcfg', JSON.stringify({
+        alarmMin: alarmMin, bedMin: bedMin, cycleMin: cycleMin, latencyMin: latencyMin
+      }));
+    }catch(e){}
+  }
+  function load(){
+    try{
+      var c = JSON.parse(localStorage.getItem('sleepcfg') || 'null');
+      if (!c) return false;
+      if (typeof c.alarmMin === 'number') alarmMin = ((c.alarmMin % 1440) + 1440) % 1440;
+      if (typeof c.bedMin === 'number')   bedMin   = ((c.bedMin % 1440) + 1440) % 1440;
+      if (c.cycleMin >= 70 && c.cycleMin <= 120) cycleMin = c.cycleMin;
+      if (c.latencyMin >= 5 && c.latencyMin <= 60) latencyMin = c.latencyMin;
+      return true;
+    }catch(e){ return false; }
+  }
+
+  /* ── 半小时胶囊 ── */
+  function buildChips(boxId, center, onPick){
+    var box = $(boxId);
+    var grid = Math.round(center / 30) * 30;
+    var html = '';
+    for (var i = -4; i <= 4; i++){
+      var t = grid + i * 30;
+      var on = t === center;
+      html += '<button class="chip' + (on ? ' on' : '') + '" data-t="' + t + '">'
+        + fmt(t) + '<small>' + periodCN(normHM(t)) + '</small></button>';
+    }
+    box.innerHTML = html;
+    box.querySelectorAll('.chip').forEach(function(c){
+      c.addEventListener('click', function(){ onPick(+c.dataset.t); });
+    });
+    var onEl = box.querySelector('.chip.on');
+    if (onEl) box.scrollLeft = onEl.offsetLeft - box.clientWidth/2 + onEl.offsetWidth/2;
+  }
+
+  function refreshAll(anim){
+    $('alarmShow').textContent = fmt(alarmMin);
+    $('bedShow').textContent = fmt(bedMin);
+    renderBlock('rowsA', 'bed',  alarmMin, anim);   // 已知闹钟 → 给就寝时刻
+    renderBlock('rowsB', 'wake', bedMin,   anim);   // 已知上床 → 给起床时刻
+    tick();
+    save();
+  }
+  function refreshChips(){
+    buildChips('chipsA', alarmMin, function(v){ alarmMin = v; setAlarmMin(v); });
+    buildChips('chipsB', bedMin, function(v){ bedMin = v; setBedMin(v); });
+  }
+  function setAlarmMin(v){
+    alarmMin = ((Math.round(v) % 1440) + 1440) % 1440;
+    var s = $('alarmShow');
+    s.textContent = fmt(alarmMin);
+    s.classList.remove('swap'); void s.offsetWidth; s.classList.add('swap');
+    buildChips('chipsA', alarmMin, function(nv){ setAlarmMin(nv); });
+    renderBlock('rowsA', 'bed', alarmMin, true);
+    tick(); save();
+  }
+  function setBedMin(v){
+    bedMin = ((Math.round(v) % 1440) + 1440) % 1440;
+    var s = $('bedShow');
+    s.textContent = fmt(bedMin);
+    s.classList.remove('swap'); void s.offsetWidth; s.classList.add('swap');
+    buildChips('chipsB', bedMin, function(nv){ setBedMin(nv); });
+    renderBlock('rowsB', 'wake', bedMin, true);
+    tick(); save();
+  }
+
+  /* ── 渲染结果 ── */
+  function renderBlock(boxId, dir, base, anim){
+    var rows = [];
+    for (var n = 6; n >= 4; n--){
+      var off = latencyMin + n * cycleMin;
+      var t = (dir === 'wake') ? base + off : base - off;
+      rows.push({
+        n: n, time: fmt(t), period: periodCN(normHM(t)),
+        hours: (Math.round(n*cycleMin/60*10)/10) + ' 小时',
+        best: n === 5
+      });
+    }
+    var html = '';
+    rows.forEach(function(r, i){
+      var st = anim
+        ? 'animation-delay:' + (i * .07) + 's'
+        : 'animation:none;opacity:1;transform:none';
+      var right = '<div class="cycles">' + r.n + ' 周期 · ' + r.hours + (r.best ? '<span class="badge">推荐</span>' : '') + '</div>';
+      if (dir === 'wake') right += '<button class="alarm" data-t="' + r.time + '">设闹钟</button>';
+      html += '<div class="item' + (r.best ? ' best' : '') + '" style="' + st + '">'
+        + '<div class="time">' + r.time + '<small>' + r.period + '</small></div>'
+        + '<div class="right">' + right + '</div></div>';
+    });
+    var box = $(boxId);
+    box.innerHTML = html;
+    box.querySelectorAll('.alarm').forEach(function(b){
+      b.addEventListener('click', function(){ setAlarm(b.dataset.t); });
+    });
+  }
+
+  /* ── 设闹钟（跨端） ── */
+  function setAlarm(t){
+    var p = t.split(':'), h = +p[0], m = +p[1];
+    var ua = navigator.userAgent;
+    var isIos = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    if (/MicroMessenger|QQ\//i.test(ua)){
+      toast('微信里调不起闹钟——用系统浏览器打开本页再点，或手动定 ' + t);
+      return;
+    }
+    if (isIos){
+      toast('将打开快捷指令（需已安装 Create Alarm），目标 ' + t);
+      location.href = 'shortcuts://run-shortcut?name=' + encodeURIComponent('Create Alarm') + '&input=' + t;
+      return;
+    }
+    if (/Android/.test(ua)){
+      toast('正在创建 ' + t + ' 的闹钟，没弹出就手动设一个');
+      location.href = 'intent://setalarm#Intent;action=android.intent.action.SET_ALARM;'
+        + 'i.android.intent.extra.alarm.HOUR=' + h + ';i.android.intent.extra.alarm.MINUTES=' + m
+        + ';S.android.intent.extra.alarm.MESSAGE=' + encodeURIComponent('周期结束') + ';end';
+      return;
+    }
+    toast('电脑上定不了闹钟——手机打开本页再点，或手动定 ' + t);
+  }
+
+  var toastEl = null;
+  function toast(msg){
+    if (toastEl) toastEl.remove();
+    var t = D.createElement('div');
+    t.className = 'toast';
+    t.setAttribute('role', 'status');
+    t.textContent = msg;
+    D.body.appendChild(t);
+    toastEl = t;
+    setTimeout(function(){
+      t.style.transition = 'opacity .3s, transform .3s';
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(8px)';
+    }, 2300);
+    setTimeout(function(){
+      t.remove();
+      if (toastEl === t) toastEl = null;
+    }, 2650);
+  }
+
+  /* ── 实时条 ── */
+  function tick(){
+    var now = new Date();
+    var nowMin = now.getHours()*60 + now.getMinutes();
+    $('clock').textContent = fmt(nowMin);
+    var rec = alarmMin - latencyMin - 5*cycleMin;   // 推荐就寝（5 周期）
+    $('liveBed').textContent = fmt(rec);
+    $('liveWake').textContent = fmt(alarmMin);
+  }
+
+  /* ── 微调 ── */
+  function bindSlider(id, key, labelId, unit, colorFn){
+    var el = $(id);
+    function paint(){
+      var v = +el.value;
+      if (key === 'cyc') cycleMin = v; else latencyMin = v;
+      var lab = $(labelId);
+      lab.textContent = v + unit;
+      lab.className = 'v ' + (colorFn ? colorFn(v) : '');
+      refreshAll(false);
+    }
+    el.value = (key === 'cyc') ? cycleMin : latencyMin;
+    el.addEventListener('input', paint);
+    paint();
+  }
+  $('tuneToggle').addEventListener('click', function(){
+    var open = $('tune').classList.toggle('open');
+    $('tuneToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  $('nowBtn').addEventListener('click', function(){
+    var n = new Date();
+    setBedMin(n.getHours()*60 + n.getMinutes());
+    toast('按 ' + fmt(bedMin) + ' 上床算好了，往上看该几点起');
+  });
+
+  /* ── 启动 ── */
+  var had = load();
+  if (!had){
+    var n = new Date(), h = n.getHours();
+    if (h >= 21 || h < 5){
+      bedMin = n.getHours()*60 + n.getMinutes();   // 深夜打开：默认按现在上床算
+    }
+    // 白天默认：闹钟 7:00、上床 23:00（初始值）
+  }
+  $('alarmShow').textContent = fmt(alarmMin);
+  $('bedShow').textContent = fmt(bedMin);
+  bindSlider('lat', 'lat', 'latV', ' 分钟', function(v){
+    return v < 9 ? 'mid' : v <= 20 ? 'ok' : v <= 30 ? 'mid' : 'bad';
+  });
+  bindSlider('cyc', 'cyc', 'cycV', ' 分钟', null);
+  refreshChips();
+  refreshAll(true);
+  setInterval(function(){ tick(); }, 15000);
+  D.addEventListener('visibilitychange', function(){
+    if (!D.hidden) tick();
+  });
+})();
+</script>
+</body>
+</html>
